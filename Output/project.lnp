@@ -1,5 +1,6 @@
 --cpu Cortex-M3
 "..\output\main.o"
+"..\output\usart.o"
 "..\output\misc.o"
 "..\output\stm32f10x_rcc.o"
 "..\output\stm32f10x_usart.o"
