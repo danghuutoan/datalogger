@@ -61,7 +61,5 @@ void usart_init( void) {
 
 void usart_send_byte(uint8_t l_data_u8) {
 	
-	/* wait until tx buffer is empty*/
-	while(USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET);
 	USART_SendData(USARTx,l_data_u8);
 }
