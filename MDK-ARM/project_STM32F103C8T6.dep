@@ -1,10 +1,12 @@
 Dependencies for Project 'project', Target 'STM32F103C8T6': (DO NOT MODIFY !)
-F (..\app\main.c)(0x55E5B98B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\main.o --omf_browse ..\output\main.crf --depend ..\output\main.d)
-I (..\driver\include\usart.h)(0x55E5B978)
+F (..\app\main.c)(0x55E5BCF0)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\main.o --omf_browse ..\output\main.crf --depend ..\output\main.d)
+I (..\driver\include\usart.h)(0x55E5BC2A)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x53464854)
-F (..\driver\usart.c)(0x55E5B996)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\usart.o --omf_browse ..\output\usart.crf --depend ..\output\usart.d)
-I (..\driver\include\usart.h)(0x55E5B978)
+I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x53464854)
+F (..\driver\usart.c)(0x55E5BCDA)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\usart.o --omf_browse ..\output\usart.crf --depend ..\output\usart.d)
+I (..\driver\include\usart.h)(0x55E5BC2A)
 I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x53464854)
+I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x53464854)
 I (..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h)(0x4D7849C4)
 I (..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h)(0x4D784AC4)
 I (..\CMSIS\CM3\CoreSupport\core_cm3.h)(0x4D524968)
@@ -32,6 +34,10 @@ I (..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_spi.h)(0x4D7849C4)
 I (..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h)(0x4D7849C4)
 I (..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h)(0x4D7849C4)
 I (..\STM32F10x_StdPeriph_Driver\inc\misc.h)(0x4D7849C4)
+F (..\driver\retarget.c)(0x55E5BBF9)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\retarget.o --omf_browse ..\output\retarget.crf --depend ..\output\retarget.d)
+I (D:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x53464854)
+I (..\driver\include\usart.h)(0x55E5BC2A)
+I (D:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x53464854)
 F (..\STM32F10x_StdPeriph_Driver\src\misc.c)(0x4D7849C4)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I..\driver\include -I..\STM32F10x_StdPeriph_Driver\inc -I..\CMSIS\CM3\CoreSupport -I..\CMSIS\CM3\DeviceSupport\ST\STM32F10x-I D:\Keil_v5\ARM\RV31\INC-I D:\Keil_v5\ARM\PACK\ARM\CMSIS\4.1.1\CMSIS\Include-I D:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.0.5\Device\Include-DSTM32F10X_MD -DUSE_STDPERIPH_DRIVER -DSTM32F10X_MD -DHSE_VALUE="8000000"-o ..\output\misc.o --omf_browse ..\output\misc.crf --depend ..\output\misc.d)
 I (..\STM32F10x_StdPeriph_Driver\inc\misc.h)(0x4D7849C4)
 I (..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h)(0x4D784AC4)

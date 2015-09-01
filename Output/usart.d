@@ -1,6 +1,7 @@
 ..\output\usart.o: ..\driver\usart.c
 ..\output\usart.o: ..\driver\include\usart.h
 ..\output\usart.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
+..\output\usart.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdio.h
 ..\output\usart.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h
 ..\output\usart.o: ..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h
 ..\output\usart.o: ..\CMSIS\CM3\CoreSupport\core_cm3.h
