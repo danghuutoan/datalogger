@@ -4,7 +4,7 @@
 ..\output\misc.o: ..\CMSIS\CM3\CoreSupport\core_cm3.h
 ..\output\misc.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdint.h
 ..\output\misc.o: ..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.h
-..\output\misc.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_conf.h
+..\output\misc.o: ..\app\include\stm32f10x_conf.h
 ..\output\misc.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h
 ..\output\misc.o: ..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h
 ..\output\misc.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_bkp.h
