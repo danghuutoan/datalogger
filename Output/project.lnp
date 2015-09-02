@@ -13,6 +13,7 @@
 "..\output\stm32f10x_bkp.o"
 "..\output\stm32f10x_pwr.o"
 "..\output\stm32f10x_rtc.o"
+"..\output\stm32f10x_dma.o"
 "..\output\ff.o"
 "..\output\fattime.o"
 "..\output\ccsbcs.o"

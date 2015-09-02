@@ -496,19 +496,14 @@
           <GroupName>fatfs</GroupName>
           <Files>
             <File>
-              <FileName>diskio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ff11\src\diskio.c</FilePath>
-            </File>
-            <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\ff11\src\ff.c</FilePath>
             </File>
             <File>
-              <FileName>syscall.c</FileName>
+              <FileName>diskio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ff11\src\option\syscall.c</FilePath>
+              <FilePath>..\ff11\src\diskio.c</FilePath>
             </File>
           </Files>
         </Group>

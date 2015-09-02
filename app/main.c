@@ -23,7 +23,7 @@ int main(void) {
 	f_mount(0,&fs);
 	f_open(&fil,"message.txt", FA_WRITE | FA_OPEN_ALWAYS); 
 	f_lseek(&fil, f_size(&fil));
-	f_printf(&fil,"test without disk_initialize ok  \r\n");
+	f_printf(&fil,"test with dma ok  \r\n");
 
   /* Close the file */
   f_close(&fil);
