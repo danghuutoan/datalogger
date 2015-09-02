@@ -18,6 +18,9 @@ Section Cross References
     usart.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB2PeriphClockCmd
     usart.o(.text) refers to stm32f10x_gpio.o(.text) for GPIO_Init
     usart.o(.text) refers to stm32f10x_usart.o(.text) for USART_Init
+    retarget.o(.text) refers (Special) to use_no_semi.o(.text) for __use_no_semihosting_swi
+    retarget.o(.text) refers to usart.o(.text) for usart_send_byte
+    retarget.o(.data) refers (Special) to use_no_semi.o(.text) for __use_no_semihosting_swi
     rtc.o(.text) refers to stm32f10x_rtc.o(.text) for RTC_GetCounter
     rtc.o(.text) refers to localtime.o(.text) for localtime
     rtc.o(.text) refers to mktime.o(.text) for mktime
@@ -27,9 +30,6 @@ Section Cross References
     rtc.o(.text) refers to misc.o(.text) for NVIC_Init
     rtc.o(.text) refers to rtc.o(.bss) for sys_date
     rtc.o(.text) refers to rtc.o(.data) for sys_nextday
-    retarget.o(.text) refers (Special) to use_no_semi.o(.text) for __use_no_semihosting_swi
-    retarget.o(.text) refers to usart.o(.text) for usart_send_byte
-    retarget.o(.data) refers (Special) to use_no_semi.o(.text) for __use_no_semihosting_swi
     stm32f10x_rcc.o(.text) refers to stm32f10x_rcc.o(.data) for APBAHBPrescTable
     stm32f10x_usart.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB2PeriphResetCmd
     stm32f10x_gpio.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB2PeriphResetCmd
@@ -48,8 +48,8 @@ Section Cross References
     startup_stm32f10x_md.o(.text) refers to startup_stm32f10x_md.o(STACK) for Stack_Mem
     system_stm32f10x.o(.text) refers to system_stm32f10x.o(.data) for SystemCoreClock
     stm32f10x_bkp.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_BackupResetCmd
-    stm32f10x_pwr.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB1PeriphResetCmd
     stm32f10x_spi.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB2PeriphResetCmd
+    stm32f10x_pwr.o(.text) refers to stm32f10x_rcc.o(.text) for RCC_APB1PeriphResetCmd
     queue.o(.text) refers to port.o(.text) for vPortEnterCritical
     queue.o(.text) refers to tasks.o(.text) for xTaskRemoveFromEventList
     queue.o(.text) refers to list.o(.text) for vListInitialise
@@ -70,14 +70,14 @@ Section Cross References
     timers.o(.text) refers to port.o(.text) for vPortYield
     timers.o(.text) refers to timers.o(.data) for pxOverflowTimerList
     timers.o(.text) refers to timers.o(.bss) for xActiveTimerList1
+    heap_4.o(.text) refers to tasks.o(.text) for vTaskSuspendAll
+    heap_4.o(.text) refers to heap_4.o(.data) for xStart
+    heap_4.o(.text) refers to heap_4.o(.bss) for ucHeap
     port.o(.emb_text) refers to tasks.o(.text) for vTaskSwitchContext
     port.o(.emb_text) refers to tasks.o(.data) for pxCurrentTCB
     port.o(.text) refers to port.o(.emb_text) for ulPortSetInterruptMask
     port.o(.text) refers to tasks.o(.text) for xTaskIncrementTick
     port.o(.text) refers to port.o(.data) for uxCriticalNesting
-    heap_4.o(.text) refers to tasks.o(.text) for vTaskSuspendAll
-    heap_4.o(.text) refers to heap_4.o(.data) for xStart
-    heap_4.o(.text) refers to heap_4.o(.bss) for ucHeap
     __2printf.o(.text) refers to _printf_char_file.o(.text) for _printf_char_file
     __2printf.o(.text) refers to retarget.o(.data) for __stdout
     noretval__2printf.o(.text) refers to _printf_char_file.o(.text) for _printf_char_file
@@ -208,8 +208,8 @@ Section Cross References
 
 Removing Unused input sections from the image.
 
-    Removing stm32f10x_spi.o(.text), (780 bytes).
     Removing stm32f10x_dma.o(.text), (596 bytes).
+    Removing stm32f10x_spi.o(.text), (780 bytes).
 
 2 unused section(s) (total 1376 bytes) removed from the image.
 
@@ -222,74 +222,74 @@ Image Symbol Table
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
+    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
-    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
+    ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  rtentry.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memclr_w.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memcpy_w.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memcpy_v6.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_intcommon.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_char_common.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  _printf_char_file.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_ss_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss_wp.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf_ss.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_flags.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __2printf.o ABSOLUTE
+    ../clib/printf.c                         0x00000000   Number         0  __printf.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  __printf_nopercent.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  noretval__2printf.o ABSOLUTE
     ../clib/printf.c                         0x00000000   Number         0  _printf_dec.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_char_common.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_ss_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __2printf.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_intcommon.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  _printf_char_file.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_wp.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_flags_ss.o ABSOLUTE
-    ../clib/printf.c                         0x00000000   Number         0  __printf_ss.o ABSOLUTE
     ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent.o ABSOLUTE
-    ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent_end.o ABSOLUTE
     ../clib/printf_percent.s                 0x00000000   Number         0  _printf_d.o ABSOLUTE
+    ../clib/printf_percent.s                 0x00000000   Number         0  _printf_percent_end.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
-    ../clib/time.c                           0x00000000   Number         0  localtime.o ABSOLUTE
-    ../clib/time.c                           0x00000000   Number         0  mktime.o ABSOLUTE
     ../clib/time.c                           0x00000000   Number         0  _monlen.o ABSOLUTE
+    ../clib/time.c                           0x00000000   Number         0  mktime.o ABSOLUTE
+    ../clib/time.c                           0x00000000   Number         0  localtime.o ABSOLUTE
     ../clib/time.c                           0x00000000   Number         0  localtime_internal.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
     ..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\arm\startup_stm32f10x_md.s 0x00000000   Number         0  startup_stm32f10x_md.o ABSOLUTE
@@ -368,13 +368,13 @@ Image Symbol Table
     vRTCTask                                 0x08000241   Thumb Code    66  main.o(.text)
     vConsoleTask                             0x08000283   Thumb Code    32  main.o(.text)
     .text                                    0x08000378   Section        0  usart.o(.text)
-    .text                                    0x0800042c   Section        0  rtc.o(.text)
-    PL_RTC_WaitForLastTask                   0x0800048d   Thumb Code    22  rtc.o(.text)
-    PL_RTC_WaitForSynchro                    0x0800050d   Thumb Code    36  rtc.o(.text)
-    PL_ConfigureRTC                          0x08000531   Thumb Code   170  rtc.o(.text)
-    .text                                    0x08000720   Section        0  retarget.o(.text)
-    SER_PutChar                              0x08000721   Thumb Code    14  retarget.o(.text)
-    SER_GetChar                              0x0800072f   Thumb Code     4  retarget.o(.text)
+    .text                                    0x0800042c   Section        0  retarget.o(.text)
+    SER_PutChar                              0x0800042d   Thumb Code    14  retarget.o(.text)
+    SER_GetChar                              0x0800043b   Thumb Code     4  retarget.o(.text)
+    .text                                    0x08000480   Section        0  rtc.o(.text)
+    PL_RTC_WaitForLastTask                   0x080004e1   Thumb Code    22  rtc.o(.text)
+    PL_RTC_WaitForSynchro                    0x08000561   Thumb Code    36  rtc.o(.text)
+    PL_ConfigureRTC                          0x08000585   Thumb Code   170  rtc.o(.text)
     .text                                    0x08000774   Section        0  misc.o(.text)
     .text                                    0x08000850   Section        0  stm32f10x_rcc.o(.text)
     .text                                    0x08000bf4   Section        0  stm32f10x_usart.o(.text)
@@ -413,11 +413,11 @@ Image Symbol Table
     prvGetNextExpireTime                     0x08003123   Thumb Code    36  timers.o(.text)
     prvTimerTask                             0x08003147   Thumb Code    26  timers.o(.text)
     prvCheckForValidListAndQueue             0x08003161   Thumb Code    56  timers.o(.text)
-    .text                                    0x0800327c   Section        0  port.o(.text)
-    prvTaskExitError                         0x0800327d   Thumb Code     8  port.o(.text)
-    .text                                    0x08003350   Section        0  heap_4.o(.text)
-    prvInsertBlockIntoFreeList               0x08003351   Thumb Code    96  heap_4.o(.text)
-    prvHeapInit                              0x080033b1   Thumb Code    98  heap_4.o(.text)
+    .text                                    0x0800327c   Section        0  heap_4.o(.text)
+    prvInsertBlockIntoFreeList               0x0800327d   Thumb Code    96  heap_4.o(.text)
+    prvHeapInit                              0x080032dd   Thumb Code    98  heap_4.o(.text)
+    .text                                    0x08003460   Section        0  port.o(.text)
+    prvTaskExitError                         0x08003461   Thumb Code     8  port.o(.text)
     .text                                    0x08003534   Section        2  use_no_semi.o(.text)
     .text                                    0x08003538   Section        0  noretval__2printf.o(.text)
     .text                                    0x08003550   Section        0  __printf.o(.text)
@@ -440,60 +440,60 @@ Image Symbol Table
     .constdata                               0x08003b28   Section       12  _monlen.o(.constdata)
     .data                                    0x20000000   Section        5  main.o(.data)
     l_count_u8                               0x20000004   Data           1  main.o(.data)
-    .data                                    0x20000005   Section        2  rtc.o(.data)
     .data                                    0x20000008   Section       12  retarget.o(.data)
-    .data                                    0x20000014   Section       20  stm32f10x_rcc.o(.data)
-    APBAHBPrescTable                         0x20000014   Data          16  stm32f10x_rcc.o(.data)
-    ADCPrescTable                            0x20000024   Data           4  stm32f10x_rcc.o(.data)
-    .data                                    0x20000028   Section       20  system_stm32f10x.o(.data)
-    .data                                    0x2000003c   Section       56  tasks.o(.data)
-    pxDelayedTaskList                        0x20000040   Data           4  tasks.o(.data)
-    pxOverflowDelayedTaskList                0x20000044   Data           4  tasks.o(.data)
-    uxTasksDeleted                           0x20000048   Data           4  tasks.o(.data)
-    uxCurrentNumberOfTasks                   0x2000004c   Data           4  tasks.o(.data)
-    xTickCount                               0x20000050   Data           4  tasks.o(.data)
-    uxTopReadyPriority                       0x20000054   Data           4  tasks.o(.data)
-    xSchedulerRunning                        0x20000058   Data           4  tasks.o(.data)
-    uxPendedTicks                            0x2000005c   Data           4  tasks.o(.data)
-    xYieldPending                            0x20000060   Data           4  tasks.o(.data)
-    xNumOfOverflows                          0x20000064   Data           4  tasks.o(.data)
-    uxTaskNumber                             0x20000068   Data           4  tasks.o(.data)
-    xNextTaskUnblockTime                     0x2000006c   Data           4  tasks.o(.data)
-    uxSchedulerSuspended                     0x20000070   Data           4  tasks.o(.data)
-    .data                                    0x20000074   Section       16  timers.o(.data)
-    pxCurrentTimerList                       0x20000074   Data           4  timers.o(.data)
-    pxOverflowTimerList                      0x20000078   Data           4  timers.o(.data)
-    xTimerQueue                              0x2000007c   Data           4  timers.o(.data)
-    xLastTime                                0x20000080   Data           4  timers.o(.data)
-    .data                                    0x20000084   Section        4  port.o(.data)
-    uxCriticalNesting                        0x20000084   Data           4  port.o(.data)
+    .data                                    0x20000014   Section        2  rtc.o(.data)
+    .data                                    0x20000016   Section       20  stm32f10x_rcc.o(.data)
+    APBAHBPrescTable                         0x20000016   Data          16  stm32f10x_rcc.o(.data)
+    ADCPrescTable                            0x20000026   Data           4  stm32f10x_rcc.o(.data)
+    .data                                    0x2000002c   Section       20  system_stm32f10x.o(.data)
+    .data                                    0x20000040   Section       56  tasks.o(.data)
+    pxDelayedTaskList                        0x20000044   Data           4  tasks.o(.data)
+    pxOverflowDelayedTaskList                0x20000048   Data           4  tasks.o(.data)
+    uxTasksDeleted                           0x2000004c   Data           4  tasks.o(.data)
+    uxCurrentNumberOfTasks                   0x20000050   Data           4  tasks.o(.data)
+    xTickCount                               0x20000054   Data           4  tasks.o(.data)
+    uxTopReadyPriority                       0x20000058   Data           4  tasks.o(.data)
+    xSchedulerRunning                        0x2000005c   Data           4  tasks.o(.data)
+    uxPendedTicks                            0x20000060   Data           4  tasks.o(.data)
+    xYieldPending                            0x20000064   Data           4  tasks.o(.data)
+    xNumOfOverflows                          0x20000068   Data           4  tasks.o(.data)
+    uxTaskNumber                             0x2000006c   Data           4  tasks.o(.data)
+    xNextTaskUnblockTime                     0x20000070   Data           4  tasks.o(.data)
+    uxSchedulerSuspended                     0x20000074   Data           4  tasks.o(.data)
+    .data                                    0x20000078   Section       16  timers.o(.data)
+    pxCurrentTimerList                       0x20000078   Data           4  timers.o(.data)
+    pxOverflowTimerList                      0x2000007c   Data           4  timers.o(.data)
+    xTimerQueue                              0x20000080   Data           4  timers.o(.data)
+    xLastTime                                0x20000084   Data           4  timers.o(.data)
     .data                                    0x20000088   Section       24  heap_4.o(.data)
     xStart                                   0x20000088   Data           8  heap_4.o(.data)
     pxEnd                                    0x20000090   Data           4  heap_4.o(.data)
     xFreeBytesRemaining                      0x20000094   Data           4  heap_4.o(.data)
     xMinimumEverFreeBytesRemaining           0x20000098   Data           4  heap_4.o(.data)
     xBlockAllocatedBit                       0x2000009c   Data           4  heap_4.o(.data)
-    .bss                                     0x200000a0   Section       12  rtc.o(.bss)
-    .bss                                     0x200000ac   Section      200  tasks.o(.bss)
-    pxReadyTasksLists                        0x200000ac   Data         100  tasks.o(.bss)
-    xDelayedTaskList1                        0x20000110   Data          20  tasks.o(.bss)
-    xDelayedTaskList2                        0x20000124   Data          20  tasks.o(.bss)
-    xPendingReadyList                        0x20000138   Data          20  tasks.o(.bss)
-    xTasksWaitingTermination                 0x2000014c   Data          20  tasks.o(.bss)
-    xSuspendedTaskList                       0x20000160   Data          20  tasks.o(.bss)
-    .bss                                     0x20000174   Section       40  timers.o(.bss)
-    xActiveTimerList1                        0x20000174   Data          20  timers.o(.bss)
-    xActiveTimerList2                        0x20000188   Data          20  timers.o(.bss)
-    .bss                                     0x2000019c   Section    17408  heap_4.o(.bss)
-    ucHeap                                   0x2000019c   Data       17408  heap_4.o(.bss)
-    .bss                                     0x2000459c   Section       44  localtime.o(.bss)
-    _tms                                     0x2000459c   Data          44  localtime.o(.bss)
-    .bss                                     0x200045c8   Section       96  libspace.o(.bss)
-    HEAP                                     0x20004628   Section      512  startup_stm32f10x_md.o(HEAP)
-    Heap_Mem                                 0x20004628   Data         512  startup_stm32f10x_md.o(HEAP)
-    STACK                                    0x20004828   Section     1024  startup_stm32f10x_md.o(STACK)
-    Stack_Mem                                0x20004828   Data        1024  startup_stm32f10x_md.o(STACK)
-    __initial_sp                             0x20004c28   Data           0  startup_stm32f10x_md.o(STACK)
+    .data                                    0x200000a0   Section        4  port.o(.data)
+    uxCriticalNesting                        0x200000a0   Data           4  port.o(.data)
+    .bss                                     0x200000a4   Section       12  rtc.o(.bss)
+    .bss                                     0x200000b0   Section      200  tasks.o(.bss)
+    pxReadyTasksLists                        0x200000b0   Data         100  tasks.o(.bss)
+    xDelayedTaskList1                        0x20000114   Data          20  tasks.o(.bss)
+    xDelayedTaskList2                        0x20000128   Data          20  tasks.o(.bss)
+    xPendingReadyList                        0x2000013c   Data          20  tasks.o(.bss)
+    xTasksWaitingTermination                 0x20000150   Data          20  tasks.o(.bss)
+    xSuspendedTaskList                       0x20000164   Data          20  tasks.o(.bss)
+    .bss                                     0x20000178   Section       40  timers.o(.bss)
+    xActiveTimerList1                        0x20000178   Data          20  timers.o(.bss)
+    xActiveTimerList2                        0x2000018c   Data          20  timers.o(.bss)
+    .bss                                     0x200001a0   Section    17408  heap_4.o(.bss)
+    ucHeap                                   0x200001a0   Data       17408  heap_4.o(.bss)
+    .bss                                     0x200045a0   Section       44  localtime.o(.bss)
+    _tms                                     0x200045a0   Data          44  localtime.o(.bss)
+    .bss                                     0x200045cc   Section       96  libspace.o(.bss)
+    HEAP                                     0x20004630   Section      512  startup_stm32f10x_md.o(HEAP)
+    Heap_Mem                                 0x20004630   Data         512  startup_stm32f10x_md.o(HEAP)
+    STACK                                    0x20004830   Section     1024  startup_stm32f10x_md.o(STACK)
+    Stack_Mem                                0x20004830   Data        1024  startup_stm32f10x_md.o(STACK)
+    __initial_sp                             0x20004c30   Data           0  startup_stm32f10x_md.o(STACK)
 
     Global Symbols
 
@@ -593,17 +593,17 @@ Image Symbol Table
     main                                     0x080002a3   Thumb Code   116  main.o(.text)
     usart_init                               0x08000379   Thumb Code   142  usart.o(.text)
     usart_send_byte                          0x08000407   Thumb Code    28  usart.o(.text)
-    PL_RTC_GetTime                           0x0800042d   Thumb Code    96  rtc.o(.text)
-    PL_RTC_SetTime                           0x080004a3   Thumb Code   106  rtc.o(.text)
-    PL_InitRTC                               0x080005db   Thumb Code   120  rtc.o(.text)
-    RTC_IRQHandler                           0x08000653   Thumb Code    88  rtc.o(.text)
-    GetSysTime                               0x080006ab   Thumb Code    54  rtc.o(.text)
-    SetSysTime                               0x080006e1   Thumb Code    42  rtc.o(.text)
-    fputc                                    0x08000733   Thumb Code    24  retarget.o(.text)
-    fgetc                                    0x0800074b   Thumb Code    16  retarget.o(.text)
-    ferror                                   0x0800075b   Thumb Code     8  retarget.o(.text)
-    _ttywrch                                 0x08000763   Thumb Code    12  retarget.o(.text)
-    _sys_exit                                0x0800076f   Thumb Code     4  retarget.o(.text)
+    fputc                                    0x0800043f   Thumb Code    24  retarget.o(.text)
+    fgetc                                    0x08000457   Thumb Code    16  retarget.o(.text)
+    ferror                                   0x08000467   Thumb Code     8  retarget.o(.text)
+    _ttywrch                                 0x0800046f   Thumb Code    12  retarget.o(.text)
+    _sys_exit                                0x0800047b   Thumb Code     4  retarget.o(.text)
+    PL_RTC_GetTime                           0x08000481   Thumb Code    96  rtc.o(.text)
+    PL_RTC_SetTime                           0x080004f7   Thumb Code   106  rtc.o(.text)
+    PL_InitRTC                               0x0800062f   Thumb Code   120  rtc.o(.text)
+    RTC_IRQHandler                           0x080006a7   Thumb Code    88  rtc.o(.text)
+    GetSysTime                               0x080006ff   Thumb Code    54  rtc.o(.text)
+    SetSysTime                               0x08000735   Thumb Code    42  rtc.o(.text)
     NVIC_PriorityGroupConfig                 0x08000775   Thumb Code    10  misc.o(.text)
     NVIC_Init                                0x0800077f   Thumb Code   100  misc.o(.text)
     NVIC_SetVectorTable                      0x080007e3   Thumb Code    14  misc.o(.text)
@@ -836,19 +836,19 @@ Image Symbol Table
     xTimerIsTimerActive                      0x0800320f   Thumb Code    32  timers.o(.text)
     pvTimerGetTimerID                        0x0800322f   Thumb Code    20  timers.o(.text)
     vTimerSetTimerID                         0x08003243   Thumb Code    20  timers.o(.text)
-    pxPortInitialiseStack                    0x08003285   Thumb Code    26  port.o(.text)
-    vPortSetupTimerInterrupt                 0x0800329f   Thumb Code    14  port.o(.text)
-    xPortStartScheduler                      0x080032ad   Thumb Code    42  port.o(.text)
-    vPortEndScheduler                        0x080032d7   Thumb Code     2  port.o(.text)
-    vPortYield                               0x080032d9   Thumb Code    20  port.o(.text)
-    vPortEnterCritical                       0x080032ed   Thumb Code    26  port.o(.text)
-    vPortExitCritical                        0x08003307   Thumb Code    26  port.o(.text)
-    SysTick_Handler                          0x08003321   Thumb Code    30  port.o(.text)
-    pvPortMalloc                             0x08003413   Thumb Code   188  heap_4.o(.text)
-    vPortFree                                0x080034cf   Thumb Code    64  heap_4.o(.text)
-    xPortGetFreeHeapSize                     0x0800350f   Thumb Code     6  heap_4.o(.text)
-    xPortGetMinimumEverFreeHeapSize          0x08003515   Thumb Code     6  heap_4.o(.text)
-    vPortInitialiseBlocks                    0x0800351b   Thumb Code     2  heap_4.o(.text)
+    pvPortMalloc                             0x0800333f   Thumb Code   188  heap_4.o(.text)
+    vPortFree                                0x080033fb   Thumb Code    64  heap_4.o(.text)
+    xPortGetFreeHeapSize                     0x0800343b   Thumb Code     6  heap_4.o(.text)
+    xPortGetMinimumEverFreeHeapSize          0x08003441   Thumb Code     6  heap_4.o(.text)
+    vPortInitialiseBlocks                    0x08003447   Thumb Code     2  heap_4.o(.text)
+    pxPortInitialiseStack                    0x08003469   Thumb Code    26  port.o(.text)
+    vPortSetupTimerInterrupt                 0x08003483   Thumb Code    14  port.o(.text)
+    xPortStartScheduler                      0x08003491   Thumb Code    42  port.o(.text)
+    vPortEndScheduler                        0x080034bb   Thumb Code     2  port.o(.text)
+    vPortYield                               0x080034bd   Thumb Code    20  port.o(.text)
+    vPortEnterCritical                       0x080034d1   Thumb Code    26  port.o(.text)
+    vPortExitCritical                        0x080034eb   Thumb Code    26  port.o(.text)
+    SysTick_Handler                          0x08003505   Thumb Code    30  port.o(.text)
     __I$use$semihosting                      0x08003535   Thumb Code     0  use_no_semi.o(.text)
     __use_no_semihosting_swi                 0x08003535   Thumb Code     2  use_no_semi.o(.text)
     __2printf                                0x08003539   Thumb Code    20  noretval__2printf.o(.text)
@@ -884,17 +884,17 @@ Image Symbol Table
     Region$$Table$$Base                      0x08003b34   Number         0  anon$$obj.o(Region$$Table)
     Region$$Table$$Limit                     0x08003b54   Number         0  anon$$obj.o(Region$$Table)
     xSDTimer                                 0x20000000   Data           4  main.o(.data)
-    SYS_TIME_ADJUSTED                        0x20000005   Data           1  rtc.o(.data)
-    sys_nextday                              0x20000006   Data           1  rtc.o(.data)
     __stdout                                 0x20000008   Data           4  retarget.o(.data)
     __stdin                                  0x2000000c   Data           4  retarget.o(.data)
     __stderr                                 0x20000010   Data           4  retarget.o(.data)
-    SystemCoreClock                          0x20000028   Data           4  system_stm32f10x.o(.data)
-    AHBPrescTable                            0x2000002c   Data          16  system_stm32f10x.o(.data)
-    pxCurrentTCB                             0x2000003c   Data           4  tasks.o(.data)
-    sys_date                                 0x200000a0   Data          12  rtc.o(.bss)
-    __libspace_start                         0x200045c8   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x20004628   Data           0  libspace.o(.bss)
+    SYS_TIME_ADJUSTED                        0x20000014   Data           1  rtc.o(.data)
+    sys_nextday                              0x20000015   Data           1  rtc.o(.data)
+    SystemCoreClock                          0x2000002c   Data           4  system_stm32f10x.o(.data)
+    AHBPrescTable                            0x20000030   Data          16  system_stm32f10x.o(.data)
+    pxCurrentTCB                             0x20000040   Data           4  tasks.o(.data)
+    sys_date                                 0x200000a4   Data          12  rtc.o(.bss)
+    __libspace_start                         0x200045cc   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x2000462c   Data           0  libspace.o(.bss)
 
 
 
@@ -904,7 +904,7 @@ Memory Map of the image
 
   Image Entry point : 0x080000ed
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00003bf4, Max: 0x00010000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00003bf8, Max: 0x00010000, ABSOLUTE)
 
     Execution Region ER_IROM1 (Base: 0x08000000, Size: 0x00003b54, Max: 0x00010000, ABSOLUTE)
 
@@ -958,13 +958,13 @@ Memory Map of the image
     0x08000186   0x00000000   Code   RO          591    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
     0x08000186   0x00000004   Code   RO          592    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
     0x0800018a   0x00000006   Code   RO          593    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
-    0x08000190   0x000000a2   Code   RO          416    .emb_text           port.o
+    0x08000190   0x000000a2   Code   RO          431    .emb_text           port.o
     0x08000232   0x00000002   PAD
     0x08000234   0x00000144   Code   RO            1    .text               main.o
     0x08000378   0x000000b4   Code   RO          154    .text               usart.o
-    0x0800042c   0x000002f4   Code   RO          166    .text               rtc.o
-    0x08000720   0x00000052   Code   RO          191    .text               retarget.o
-    0x08000772   0x00000002   PAD
+    0x0800042c   0x00000052   Code   RO          166    .text               retarget.o
+    0x0800047e   0x00000002   PAD
+    0x08000480   0x000002f4   Code   RO          185    .text               rtc.o
     0x08000774   0x000000dc   Code   RO          210    .text               misc.o
     0x08000850   0x000003a4   Code   RO          222    .text               stm32f10x_rcc.o
     0x08000bf4   0x00000408   Code   RO          236    .text               stm32f10x_usart.o
@@ -972,14 +972,14 @@ Memory Map of the image
     0x08001358   0x00000040   Code   RO          263    .text               startup_stm32f10x_md.o
     0x08001398   0x000001e0   Code   RO          268    .text               system_stm32f10x.o
     0x08001578   0x000000c4   Code   RO          286    .text               stm32f10x_bkp.o
-    0x0800163c   0x000000cc   Code   RO          298    .text               stm32f10x_pwr.o
-    0x08001708   0x00000148   Code   RO          322    .text               stm32f10x_rtc.o
+    0x0800163c   0x000000cc   Code   RO          322    .text               stm32f10x_pwr.o
+    0x08001708   0x00000148   Code   RO          334    .text               stm32f10x_rtc.o
     0x08001850   0x00000094   Code   RO          346    .text               list.o
     0x080018e4   0x000005e0   Code   RO          367    .text               queue.o
     0x08001ec4   0x00000fbc   Code   RO          382    .text               tasks.o
     0x08002e80   0x000003fc   Code   RO          401    .text               timers.o
-    0x0800327c   0x000000d4   Code   RO          417    .text               port.o
-    0x08003350   0x000001e4   Code   RO          440    .text               heap_4.o
+    0x0800327c   0x000001e4   Code   RO          416    .text               heap_4.o
+    0x08003460   0x000000d4   Code   RO          432    .text               port.o
     0x08003534   0x00000002   Code   RO          457    .text               c_w.l(use_no_semi.o)
     0x08003536   0x00000002   PAD
     0x08003538   0x00000018   Code   RO          461    .text               c_w.l(noretval__2printf.o)
@@ -1003,28 +1003,30 @@ Memory Map of the image
     0x08003b34   0x00000020   Data   RO          660    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00004c28, Max: 0x00005000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x00004c30, Max: 0x00005000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000000   0x00000005   Data   RW            2    .data               main.o
-    0x20000005   0x00000002   Data   RW          168    .data               rtc.o
-    0x20000007   0x00000001   PAD
-    0x20000008   0x0000000c   Data   RW          192    .data               retarget.o
-    0x20000014   0x00000014   Data   RW          223    .data               stm32f10x_rcc.o
-    0x20000028   0x00000014   Data   RW          269    .data               system_stm32f10x.o
-    0x2000003c   0x00000038   Data   RW          384    .data               tasks.o
-    0x20000074   0x00000010   Data   RW          403    .data               timers.o
-    0x20000084   0x00000004   Data   RW          418    .data               port.o
-    0x20000088   0x00000018   Data   RW          442    .data               heap_4.o
-    0x200000a0   0x0000000c   Zero   RW          167    .bss                rtc.o
-    0x200000ac   0x000000c8   Zero   RW          383    .bss                tasks.o
-    0x20000174   0x00000028   Zero   RW          402    .bss                timers.o
-    0x2000019c   0x00004400   Zero   RW          441    .bss                heap_4.o
-    0x2000459c   0x0000002c   Zero   RW          492    .bss                c_w.l(localtime.o)
-    0x200045c8   0x00000060   Zero   RW          543    .bss                c_w.l(libspace.o)
-    0x20004628   0x00000200   Zero   RW          261    HEAP                startup_stm32f10x_md.o
-    0x20004828   0x00000400   Zero   RW          260    STACK               startup_stm32f10x_md.o
+    0x20000005   0x00000003   PAD
+    0x20000008   0x0000000c   Data   RW          167    .data               retarget.o
+    0x20000014   0x00000002   Data   RW          187    .data               rtc.o
+    0x20000016   0x00000014   Data   RW          223    .data               stm32f10x_rcc.o
+    0x2000002a   0x00000002   PAD
+    0x2000002c   0x00000014   Data   RW          269    .data               system_stm32f10x.o
+    0x20000040   0x00000038   Data   RW          384    .data               tasks.o
+    0x20000078   0x00000010   Data   RW          403    .data               timers.o
+    0x20000088   0x00000018   Data   RW          418    .data               heap_4.o
+    0x200000a0   0x00000004   Data   RW          433    .data               port.o
+    0x200000a4   0x0000000c   Zero   RW          186    .bss                rtc.o
+    0x200000b0   0x000000c8   Zero   RW          383    .bss                tasks.o
+    0x20000178   0x00000028   Zero   RW          402    .bss                timers.o
+    0x200001a0   0x00004400   Zero   RW          417    .bss                heap_4.o
+    0x200045a0   0x0000002c   Zero   RW          492    .bss                c_w.l(localtime.o)
+    0x200045cc   0x00000060   Zero   RW          543    .bss                c_w.l(libspace.o)
+    0x2000462c   0x00000004   PAD
+    0x20004630   0x00000200   Zero   RW          261    HEAP                startup_stm32f10x_md.o
+    0x20004830   0x00000400   Zero   RW          260    STACK               startup_stm32f10x_md.o
 
 
 ==============================================================================
@@ -1055,9 +1057,9 @@ Image component sizes
        180         10          0          0          0        781   usart.o
 
     ----------------------------------------------------------------------
-     13220        684        268        160      19196     333596   Object Totals
+     13220        684        268        164      19196     333596   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         4          0          0          1          0          0   (incl. Padding)
+         4          0          0          5          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1099,8 +1101,8 @@ Image component sizes
          2          0          0          0          0         68   use_no_semi.o
 
     ----------------------------------------------------------------------
-      1688         64         12          0        140       1536   Library Totals
-         6          0          0          0          0          0   (incl. Padding)
+      1688         64         12          0        144       1536   Library Totals
+         6          0          0          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1109,7 +1111,7 @@ Image component sizes
       1682         64         12          0        140       1536   c_w.l
 
     ----------------------------------------------------------------------
-      1688         64         12          0        140       1536   Library Totals
+      1688         64         12          0        144       1536   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -1118,15 +1120,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     14908        748        280        160      19336     332164   Grand Totals
-     14908        748        280        160      19336     332164   ELF Image Totals
-     14908        748        280        160          0          0   ROM Totals
+     14908        748        280        164      19340     332164   Grand Totals
+     14908        748        280        164      19340     332164   ELF Image Totals
+     14908        748        280        164          0          0   ROM Totals
 
 ==============================================================================
 
     Total RO  Size (Code + RO Data)                15188 (  14.83kB)
-    Total RW  Size (RW Data + ZI Data)             19496 (  19.04kB)
-    Total ROM Size (Code + RO Data + RW Data)      15348 (  14.99kB)
+    Total RW  Size (RW Data + ZI Data)             19504 (  19.05kB)
+    Total ROM Size (Code + RO Data + RW Data)      15352 (  14.99kB)
 
 ==============================================================================
 
