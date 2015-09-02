@@ -7,14 +7,42 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
-
+#include "timers.h"
 #include "rtc.h"
+#include "list.h"
+TimerHandle_t xSDTimer;
+
 static void vConsoleTask( void *pvParameters );
 static void vRTCTask( void *pvParameters );
+
+static void vSDTimerCallback( TimerHandle_t pxTimer ) {
+	
+	printf("message from timer \r\n");
+}
 int main(void) {
 	
 	usart_init();
 	PL_InitRTC();
+	xSDTimer = xTimerCreate(     "Timer",         // Just a text name, not used by the kernel.
+                                         ( 1000 ),     // The timer period in ticks.
+                                         pdTRUE,         // The timers will auto-reload themselves when they expire.
+                                         ( void * ) 1,     // Assign each timer a unique id equal to its array index.
+                                         vSDTimerCallback     // Each timer calls the same callback when it expires.
+                                     );
+																				
+	if( xSDTimer == NULL ) {
+              // The timer was not created.
+  }
+  else {
+		
+		// Start the timer.  No block time is specified, and even if one was
+		// it would be ignored because the scheduler has not yet been
+		// started.
+		if( xTimerStart( xSDTimer, 0 ) != pdPASS )
+		{
+				// The timer could not be set into the Active state.
+		}
+	}
 	xTaskCreate( vConsoleTask, "Console", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 	xTaskCreate( vRTCTask, "RTC", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
 	vTaskStartScheduler();
@@ -46,3 +74,5 @@ void vRTCTask( void *pvParameters ) {
 		vTaskDelay(1000);
 	}
 }
+
+

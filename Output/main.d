@@ -13,6 +13,7 @@
 ..\output\main.o: ..\FreeRTOS\include\task.h
 ..\output\main.o: ..\FreeRTOS\include\list.h
 ..\output\main.o: ..\FreeRTOS\include\queue.h
+..\output\main.o: ..\FreeRTOS\include\timers.h
 ..\output\main.o: ..\driver\include\rtc.h
 ..\output\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
 ..\output\main.o: ..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h
@@ -43,3 +44,4 @@
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\misc.h
+..\output\main.o: ..\FreeRTOS\include\list.h
