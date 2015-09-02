@@ -4,138 +4,40 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 D:\GITHUB\datalogger\MDK-ARM\project.uvproj
-Project File Date:  09/01/2015
+Project File Date:  09/02/2015
 
 <h2>Output:</h2>
 Build target 'STM32F103C8T6'
-compiling sdcard.c...
-linking...
-Program Size: Code=15704 RO-data=280 RW-data=84 ZI-data=3772  
-"..\Output\project.axf" - 0 Error(s), 0 Warning(s).
-Load "..\\Output\\project.axf" 
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
-</pre>
-</body>
-</html>
-n.c(55): warning:  #1-D: last line of file ends without a newline
+compiling main.c...
+..\app\main.c(12): warning:  #177-D: variable "line" was declared but never referenced
+      char line[82]; /* Line buffer */
+..\app\main.c(13): warning:  #550-D: variable "fr" was set but never used
+      FRESULT fr;    /* FatFs return code */
+..\app\main.c(51): warning:  #1-D: last line of file ends without a newline
   }
 ..\app\main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=15728 RO-data=280 RW-data=84 ZI-data=3772  
+Program Size: Code=16720 RO-data=280 RW-data=84 ZI-data=2236  
 "..\Output\project.axf" - 0 Error(s), 3 Warning(s).
 Load "..\\Output\\project.axf" 
 Erase Done.
 Programming Done.
 Verify OK.
 Application running ...
-nning ...
-t open file
-Error: Flash Download failed  -  Could not load file '..\Output\project.axf'
-compiling system_stm32f10x.c...
+ng system_stm32f10x.c...
 compiling stm32f10x_spi.c...
 compiling stm32f10x_bkp.c...
 compiling stm32f10x_pwr.c...
 compiling stm32f10x_rtc.c...
-compiling diskio.c...
 compiling ff.c...
-compiling ccsbcs.c...
-..\ff11\src\option\ccsbcs.c(497): error:  #35: #error directive: This file is not needed in current configuration. Remove from the project.
-  #error This file is not needed in current configuration. Remove from the project.
-..\ff11\src\option\ccsbcs.c: 0 warnings, 1 error
-compiling syscall.c...
-..\ff11\src\option\syscall.c(13): warning:  #9-D: nested comment is not allowed
-  /*------------------------------------------------------------------------*/
-..\ff11\src\option\syscall.c: 1 warning, 0 errors
-"..\Output\project.axf" - 2 Error(s), 4 Warning(s).
-Target not created
-been cancelled
+compiling diskio.c...
+linking...
+Program Size: Code=16656 RO-data=280 RW-data=84 ZI-data=2236  
+"..\Output\project.axf" - 0 Error(s), 3 Warning(s).
 Load "..\\Output\\project.axf" 
 Erase Done.
 Programming Done.
 Verify OK.
-ng:  #77-D: this declaration has no storage class or type specifier
-        GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
-..\driver\sdcard.c(558): error:  #147: declaration is incompatible with "void GPIO_Init(GPIO_TypeDef *, GPIO_InitTypeDef *)" (declared at line 351 of "..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_gpio.h")
-        GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
-..\driver\sdcard.c(560): error:  #77-D: this declaration has no storage class or type specifier
-        GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_SPI_SD_MISO;
-..\driver\sdcard.c(560): error:  #65: expected a ";"
-        GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_SPI_SD_MISO;
-..\driver\sdcard.c(561): error:  #77-D: this declaration has no storage class or type specifier
-        GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IPU;
-..\driver\sdcard.c(561): error:  #65: expected a ";"
-        GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_IPU;
-..\driver\sdcard.c(562): error:  #79: expected a type specifier
-        GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
-..\driver\sdcard.c(562): error:  #79: expected a type specifier
-        GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
-..\driver\sdcard.c(562): warning:  #77-D: this declaration has no storage class or type specifier
-        GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
-..\driver\sdcard.c(565): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-..\driver\sdcard.c(565): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-..\driver\sdcard.c(566): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-..\driver\sdcard.c(566): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-..\driver\sdcard.c(567): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-..\driver\sdcard.c(567): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-..\driver\sdcard.c(568): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-..\driver\sdcard.c(568): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-..\driver\sdcard.c(569): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-..\driver\sdcard.c(569): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-..\driver\sdcard.c(570): error:  #77-D: this declaration has no storage class or type specifier
-        SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-..\driver\sdcard.c(570): error:  #65: expected a ";"
-        SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-..\driver\sdcard.c: 3 warnings, 30 errors
-"..\Output\project.axf" - 30 Error(s), 3 Warning(s).
-Target not created
-ning(s).
-Target not created
-        result = MMC_disk_status();
-..\ff11\src\diskio.c: 0 warnings, 1 error
-"..\Output\project.axf" - 31 Error(s), 3 Warning(s).
-Target not created
-count);
-..\ff11\src\diskio.c: 1 warning, 1 error
-"..\Output\project.axf" - 31 Error(s), 4 Warning(s).
-Target not created
-;
-..\ff11\src\diskio.c: 2 warnings, 1 error
-"..\Output\project.axf" - 31 Error(s), 5 Warning(s).
-Target not created
-nings, 0 errors
-"..\Output\project.axf" - 30 Error(s), 7 Warning(s).
-Target not created
-but never used
-        int result;
-..\ff11\src\diskio.c(206): warning:  #177-D: variable "result" was declared but never referenced
-        int result;
-..\ff11\src\diskio.c: 6 warnings, 0 errors
-"..\Output\project.axf" - 30 Error(s), 9 Warning(s).
-Target not created
-d but never referenced
-        int result;
-..\ff11\src\diskio.c(158): warning:  #550-D: variable "result" was set but never used
-        int result;
-..\ff11\src\diskio.c(206): warning:  #177-D: variable "result" was declared but never referenced
-        int result;
-..\ff11\src\diskio.c: 7 warnings, 0 errors
-compiling ff.c...
-compiling ccsbcs.c...
-..\ff11\src\option\ccsbcs.c(497): error:  #35: #error directive: This file is not needed in current configuration. Remove from the project.
-  #error This file is not needed in current configuration. Remove from the project.
-..\ff11\src\option\ccsbcs.c: 0 warnings, 1 error
-"..\Output\project.axf" - 31 Error(s), 11 Warning(s).
+Application running ...
+ 1 Error(s), 3 Warning(s).
 Target not created

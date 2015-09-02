@@ -20,16 +20,12 @@ int main(void) {
 			while (1);
 		}
 		 printf("finish\r\n");
-		 MMC_disk_initialize();
-//    /* Register work area to the default drive */
+		 //MMC_disk_initialize();
+    /* Register work area to the default drive */
     f_mount(&FatFs, "", 1);
-
-//    /* Open a text file */
-   fr = f_open(&fil, "message.txt", FA_CREATE_NEW | FA_WRITE);
-//		f_write(&fil,"helllo");
-//    //if (fr) return (int)fr;
-
-//    
+    /* Open a text file */
+   fr = f_open(&fil, "message.txt", FA_OPEN_ALWAYS | FA_WRITE);
+	 f_printf(&fil,"hello\r\n");
 
 //    /* Close the file */
     f_close(&fil);

@@ -54,8 +54,8 @@
 // demo uses a command line option to define this (see Makefile):
 //#define USE_EK_STM32F
 //#define USE_STM32_P103
-//#define USE_MINI_STM32
-#define USE_KEIL_MCBSTM32
+#define USE_MINI_STM32
+//#define USE_KEIL_MCBSTM32
 
 #if defined(USE_EK_STM32F)
  #define CARD_SUPPLY_SWITCHABLE   1
@@ -116,8 +116,16 @@
 
 #elif defined(USE_MINI_STM32)
  #define CARD_SUPPLY_SWITCHABLE   0
- #define SOCKET_WP_CONNECTED      0
+ #define GPIO_PWR                 GPIOD
+ #define RCC_APB2Periph_GPIO_PWR  RCC_APB2Periph_GPIOD
+ #define GPIO_Pin_PWR             GPIO_Pin_10
+ #define GPIO_Mode_PWR            GPIO_Mode_Out_OD /* pull-up resistor at power FET */
+ #define SOCKET_WP_CONNECTED      1
  #define SOCKET_CP_CONNECTED      0
+ #define GPIO_WP                  GPIOB
+ #define RCC_APBxPeriph_GPIO_WP   RCC_APB2Periph_GPIOB
+ #define GPIO_Mode_WP             GPIO_Mode_IN_FLOATING /* external resistor */
+ #define GPIO_Pin_WP              GPIO_Pin_9
  #define SPI_SD                   SPI1
  #define GPIO_CS                  GPIOA
  #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOA
@@ -540,7 +548,7 @@ void power_on (void)
 	socket_cp_init();
 	socket_wp_init();
 
-	//for (Timer1 = 25; Timer1; );	/* Wait for 250ms */
+	for (Timer1 = 25; Timer1; );	/* Wait for 250ms */
 
 	/* Configure I/O for Flash Chip select */
 	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_CS;
@@ -562,25 +570,16 @@ void power_on (void)
 	GPIO_Init(GPIO_SPI_SD, &GPIO_InitStructure);
 
 	/* SPI configuration */
-//	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-//	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
-//	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-//	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
-//	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
-//	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-//	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4; // 72000kHz/256=281kHz < 400kHz
-//	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
-//	SPI_InitStructure.SPI_CRCPolynomial = 7;
-  SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
-	SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;
-	SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;
-	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
-	SPI_InitStructure.SPI_CRCPolynomial = 7;
 	SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;
-	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
 	SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+	SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+	SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+	SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
 	SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
-	 
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256; // 72000kHz/256=281kHz < 400kHz
+	SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+	SPI_InitStructure.SPI_CRCPolynomial = 7;
+
 	SPI_Init(SPI_SD, &SPI_InitStructure);
 	SPI_CalculateCRC(SPI_SD, DISABLE);
 	SPI_Cmd(SPI_SD, ENABLE);
