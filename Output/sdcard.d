@@ -31,7 +31,4 @@
 ..\output\sdcard.o: ..\ff11\src\ffconf.h
 ..\output\sdcard.o: ..\ff11\src\diskio.h
 ..\output\sdcard.o: ..\ff11\src\integer.h
-..\output\sdcard.o: ..\driver\include\sdcard.h
-..\output\sdcard.o: ..\app\include\std_type.h
 ..\output\sdcard.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
-..\output\sdcard.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\time.h

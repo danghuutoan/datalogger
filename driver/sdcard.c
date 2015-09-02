@@ -35,70 +35,29 @@
 #include "stm32f10x.h"
 #include "ffconf.h"
 #include "diskio.h"
-#include "sdcard.h"
-#include "std_type.h"
-#include "stm32f10x_rtc.h"
-#include <time.h>
-// demo uses a command line option to define this (see Makefile):
-// #define STM32_SD_USE_DMA
-
-
-#ifdef STM32_SD_USE_DMA
-// #warning "Information only: using DMA"
-#pragma message "*** Using DMA ***"
-#endif
+#define SD_SPI1
 
 /* set to 1 to provide a disk_ioctrl function even if not needed by the FatFs */
 #define STM32_SD_DISK_IOCTRL_FORCE      0
 
 // demo uses a command line option to define this (see Makefile):
 //#define USE_EK_STM32F
-//#define USE_STM32_P103
-//#define USE_MINI_STM32
-#define USE_KEIL_MCBSTM32
-
-#if defined(USE_EK_STM32F)
- #define CARD_SUPPLY_SWITCHABLE   1
- #define GPIO_PWR                 GPIOD
- #define RCC_APB2Periph_GPIO_PWR  RCC_APB2Periph_GPIOD
- #define GPIO_Pin_PWR             GPIO_Pin_10
- #define GPIO_Mode_PWR            GPIO_Mode_Out_OD /* pull-up resistor at power FET */
- #define SOCKET_WP_CONNECTED      0
- #define SOCKET_CP_CONNECTED      0
- #define SPI_SD                   SPI1
- #define GPIO_CS                  GPIOD
- #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOD
- #define GPIO_Pin_CS              GPIO_Pin_9
- #define DMA_Channel_SPI_SD_RX    DMA1_Channel2
- #define DMA_Channel_SPI_SD_TX    DMA1_Channel3
- #define DMA_FLAG_SPI_SD_TC_RX    DMA1_FLAG_TC2
- #define DMA_FLAG_SPI_SD_TC_TX    DMA1_FLAG_TC3
- #define GPIO_SPI_SD              GPIOA
- #define GPIO_Pin_SPI_SD_SCK      GPIO_Pin_5
- #define GPIO_Pin_SPI_SD_MISO     GPIO_Pin_6
- #define GPIO_Pin_SPI_SD_MOSI     GPIO_Pin_7
- #define RCC_APBPeriphClockCmd_SPI_SD  RCC_APB2PeriphClockCmd
- #define RCC_APBPeriph_SPI_SD     RCC_APB2Periph_SPI1
- /* - for SPI1 and full-speed APB2: 72MHz/4 */
- #define SPI_BaudRatePrescaler_SPI_SD  SPI_BaudRatePrescaler_4
-
-#elif defined(USE_STM32_P103)
- // Olimex STM32-P103 not tested!
+#ifdef SD_SPI2
  #define CARD_SUPPLY_SWITCHABLE   0
  #define SOCKET_WP_CONNECTED      1 /* write-protect socket-switch */
- #define SOCKET_CP_CONNECTED      1 /* card-present socket-switch */
- #define GPIO_WP                  GPIOC
- #define GPIO_CP                  GPIOC
- #define RCC_APBxPeriph_GPIO_WP   RCC_APB2Periph_GPIOC
- #define RCC_APBxPeriph_GPIO_CP   RCC_APB2Periph_GPIOC
- #define GPIO_Pin_WP              GPIO_Pin_6
- #define GPIO_Pin_CP              GPIO_Pin_7
+ #define SOCKET_CP_CONNECTED      0 /* card-present socket-switch */
+ #define GPIO_WP                  GPIOB
+ #define GPIO_CP                  GPIOB
+ #define RCC_APBxPeriph_GPIO_WP   RCC_APB2Periph_GPIOB
+ #define RCC_APBxPeriph_GPIO_CP   RCC_APB2Periph_GPIOB
+ #define GPIO_Pin_WP              GPIO_Pin_7
+ #define GPIO_Pin_CP              GPIO_Pin_6
  #define GPIO_Mode_WP             GPIO_Mode_IN_FLOATING /* external resistor */
  #define GPIO_Mode_CP             GPIO_Mode_IN_FLOATING /* external resistor */
  #define SPI_SD                   SPI2
- #define GPIO_CS                  GPIOB
- #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOB
- #define GPIO_Pin_CS              GPIO_Pin_12
+ #define GPIO_CS                  GPIOC
+ #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOC
+ #define GPIO_Pin_CS              GPIO_Pin_8
  #define DMA_Channel_SPI_SD_RX    DMA1_Channel4
  #define DMA_Channel_SPI_SD_TX    DMA1_Channel5
  #define DMA_FLAG_SPI_SD_TC_RX    DMA1_FLAG_TC4
@@ -113,53 +72,37 @@
  /* !! PRESCALE 4 used here - 2 does not work, maybe because
        of the poor wiring on the HELI_V1 prototype hardware */
  #define SPI_BaudRatePrescaler_SPI_SD  SPI_BaudRatePrescaler_4
-
-#elif defined(USE_MINI_STM32)
- #define CARD_SUPPLY_SWITCHABLE   0
- #define SOCKET_WP_CONNECTED      0
- #define SOCKET_CP_CONNECTED      0
- #define SPI_SD                   SPI1
- #define GPIO_CS                  GPIOA
- #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOA
- #define GPIO_Pin_CS              GPIO_Pin_4
- #define DMA_Channel_SPI_SD_RX    DMA1_Channel2
- #define DMA_Channel_SPI_SD_TX    DMA1_Channel3
- #define DMA_FLAG_SPI_SD_TC_RX    DMA1_FLAG_TC2
- #define DMA_FLAG_SPI_SD_TC_TX    DMA1_FLAG_TC3
- #define GPIO_SPI_SD              GPIOA
- #define GPIO_Pin_SPI_SD_SCK      GPIO_Pin_5
- #define GPIO_Pin_SPI_SD_MISO     GPIO_Pin_6
- #define GPIO_Pin_SPI_SD_MOSI     GPIO_Pin_7
- #define RCC_APBPeriphClockCmd_SPI_SD  RCC_APB2PeriphClockCmd
- #define RCC_APBPeriph_SPI_SD     RCC_APB2Periph_SPI1
- /* - for SPI1 and full-speed APB2: 72MHz/4 */
- #define SPI_BaudRatePrescaler_SPI_SD  SPI_BaudRatePrescaler_4
-
-#elif defined(USE_KEIL_MCBSTM32)
- #define CARD_SUPPLY_SWITCHABLE   0
- #define SOCKET_WP_CONNECTED      0
- #define SOCKET_CP_CONNECTED      0
- #define SPI_SD                   SPI1
- #define GPIO_CS                  GPIOA
- #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOA
- #define GPIO_Pin_CS              GPIO_Pin_4
- #define DMA_Channel_SPI_SD_RX    DMA1_Channel2
- #define DMA_Channel_SPI_SD_TX    DMA1_Channel3
- #define DMA_FLAG_SPI_SD_TC_RX    DMA1_FLAG_TC2
- #define DMA_FLAG_SPI_SD_TC_TX    DMA1_FLAG_TC3
- #define GPIO_SPI_SD              GPIOA
- #define GPIO_Pin_SPI_SD_SCK      GPIO_Pin_5
- #define GPIO_Pin_SPI_SD_MISO     GPIO_Pin_6
- #define GPIO_Pin_SPI_SD_MOSI     GPIO_Pin_7
- #define RCC_APBPeriphClockCmd_SPI_SD  RCC_APB2PeriphClockCmd
- #define RCC_APBPeriph_SPI_SD     RCC_APB2Periph_SPI1
- /* - for SPI1 and full-speed APB2: 72MHz/4 */
- #define SPI_BaudRatePrescaler_SPI_SD  SPI_BaudRatePrescaler_4
-
-#else
-#error "unsupported board"
 #endif
-
+#ifdef SD_SPI1
+ #define CARD_SUPPLY_SWITCHABLE   0
+ #define GPIO_PWR                 GPIOD
+ #define RCC_APB2Periph_GPIO_PWR  RCC_APB2Periph_GPIOD
+ #define GPIO_Pin_PWR             GPIO_Pin_10
+ #define GPIO_Mode_PWR            GPIO_Mode_Out_OD /* pull-up resistor at power FET */
+ #define SOCKET_WP_CONNECTED      1
+ #define SOCKET_CP_CONNECTED      0
+ #define GPIO_WP                  GPIOB
+ #define RCC_APBxPeriph_GPIO_WP   RCC_APB2Periph_GPIOB
+ #define GPIO_Mode_WP             GPIO_Mode_IN_FLOATING /* external resistor */
+ #define GPIO_Pin_WP              GPIO_Pin_9
+ #define SPI_SD                   SPI1
+ #define GPIO_CS                  GPIOA
+ #define RCC_APB2Periph_GPIO_CS   RCC_APB2Periph_GPIOA
+ #define GPIO_Pin_CS              GPIO_Pin_4
+ #define DMA_Channel_SPI_SD_RX    DMA1_Channel2
+ #define DMA_Channel_SPI_SD_TX    DMA1_Channel3
+ #define DMA_FLAG_SPI_SD_TC_RX    DMA1_FLAG_TC2
+ #define DMA_FLAG_SPI_SD_TC_TX    DMA1_FLAG_TC3
+ #define GPIO_SPI_SD              GPIOA
+ #define GPIO_Pin_SPI_SD_SCK      GPIO_Pin_5
+ #define GPIO_Pin_SPI_SD_MISO     GPIO_Pin_6
+ #define GPIO_Pin_SPI_SD_MOSI     GPIO_Pin_7
+ #define RCC_APBPeriphClockCmd_SPI_SD  RCC_APB2PeriphClockCmd
+ #define RCC_APBPeriph_SPI_SD     RCC_APB2Periph_SPI1
+ /* - for SPI1 and full-speed APB2: 72MHz/4 */
+ #define SPI_BaudRatePrescaler_SPI_SD  SPI_BaudRatePrescaler_4
+ 
+#endif
 
 /* Definitions for MMC/SDC command */
 #define CMD0	(0x40+0)	/* GO_IDLE_STATE */
@@ -180,9 +123,9 @@
 #define CMD55	(0x40+55)	/* APP_CMD */
 #define CMD58	(0x40+58)	/* READ_OCR */
 
-/* Card-Select Controls  (Platform dependent) */
-#define SELECT()        GPIO_ResetBits(GPIO_CS, GPIO_Pin_CS)    /* MMC CS = L */
-#define DESELECT()      GPIO_SetBits(GPIO_CS, GPIO_Pin_CS)      /* MMC CS = H */
+/* Card-_SELECT Controls  (Platform dependent) */
+#define _SELECT()        GPIO_ResetBits(GPIO_CS, GPIO_Pin_CS)    /* MMC CS = L */
+#define _DE_SELECT()      GPIO_SetBits(GPIO_CS, GPIO_Pin_CS)      /* MMC CS = H */
 
 /* Manley EK-STM32F board does not offer socket contacts -> dummy values: */
 #define SOCKPORT	1			/* Socket contact port */
@@ -194,12 +137,6 @@
 #else
 #define STM32_SD_DISK_IOCTRL   0
 #endif
-
-#define 	CT_MMC   0x01
-#define 	CT_SD1   0x02
-#define 	CT_SD2   0x04
-#define 	CT_SDC   (CT_SD1|CT_SD2)
-#define 	CT_BLOCK   0x08
 
 /*--------------------------------------------------------------------------
 
@@ -262,7 +199,7 @@ static void socket_wp_init(void)
 	return;
 }
 
-static __INLINE DWORD socket_is_write_protected(void)
+static inline DWORD socket_is_write_protected(void)
 {
 	return 0; /* fake not protected */
 }
@@ -284,7 +221,7 @@ static void socket_cp_init(void)
 	GPIO_Init(GPIO_CP, &GPIO_InitStructure);
 }
 
-static __INLINE DWORD socket_is_empty(void)
+static DWORD socket_is_empty(void)
 {
 	return ( GPIO_ReadInputData(GPIO_CP) & GPIO_Pin_CP ) ? socket_state_mask_cp : FALSE;
 }
@@ -296,7 +233,7 @@ static void socket_cp_init(void)
 	return;
 }
 
-static __INLINE DWORD socket_is_empty(void)
+static DWORD socket_is_empty(void)
 {
 	return 0; /* fake inserted */
 }
@@ -320,7 +257,7 @@ static void card_power(BOOL on)		/* switch FET for card-socket VCC */
 	if (on) {
 		GPIO_ResetBits(GPIO_PWR, GPIO_Pin_PWR);
 	} else {
-		/* Chip select internal pull-down (to avoid parasite powering) */
+		/* Chip _SELECT internal pull-down (to avoid parasite powering) */
 		GPIO_InitStructure.GPIO_Pin = GPIO_Pin_CS;
 		GPIO_Init(GPIO_CS, &GPIO_InitStructure);
 
@@ -361,6 +298,7 @@ static int chk_power(void)
 /*-----------------------------------------------------------------------*/
 static BYTE stm32_spi_rw( BYTE out )
 {
+	uint32_t timeout = 1000000;
 	/* Loop while DR register in not empty */
 	/// not needed: while (SPI_I2S_GetFlagStatus(SPI_SD, SPI_I2S_FLAG_TXE) == RESET) { ; }
 
@@ -368,7 +306,7 @@ static BYTE stm32_spi_rw( BYTE out )
 	SPI_I2S_SendData(SPI_SD, out);
 
 	/* Wait to receive a byte */
-	while (SPI_I2S_GetFlagStatus(SPI_SD, SPI_I2S_FLAG_RXNE) == RESET) { ; }
+	while (SPI_I2S_GetFlagStatus(SPI_SD, SPI_I2S_FLAG_RXNE) == RESET && timeout>0) { timeout--; }
 
 	/* Return the byte read from the SPI bus */
 	return SPI_I2S_ReceiveData(SPI_SD);
@@ -419,13 +357,13 @@ BYTE wait_ready (void)
 
 
 /*-----------------------------------------------------------------------*/
-/* Deselect the card and release SPI bus                                 */
+/* _DE_SELECT the card and release SPI bus                                 */
 /*-----------------------------------------------------------------------*/
 
 static
 void release_spi (void)
 {
-	DESELECT();
+	_DE_SELECT();
 	rcvr_spi();
 }
 
@@ -540,16 +478,16 @@ void power_on (void)
 	socket_cp_init();
 	socket_wp_init();
 
-	//for (Timer1 = 25; Timer1; );	/* Wait for 250ms */
+	for (Timer1 = 25; Timer1; );	/* Wait for 250ms */
 
-	/* Configure I/O for Flash Chip select */
+	/* Configure I/O for Flash Chip _SELECT */
 	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_CS;
 	GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIO_CS, &GPIO_InitStructure);
 
-	/* De-select the Card: Chip Select high */
-	DESELECT();
+	/* De-_SELECT the Card: Chip _SELECT high */
+	_DE_SELECT();
 
 	/* Configure SPI pins: SCK and MOSI with default alternate function (not re-mapped) push-pull */
 	GPIO_InitStructure.GPIO_Pin   = GPIO_Pin_SPI_SD_SCK | GPIO_Pin_SPI_SD_MOSI;
@@ -601,7 +539,7 @@ void power_off (void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	if (!(Stat & STA_NOINIT)) {
-		SELECT();
+		_SELECT();
 		wait_ready();
 		release_spi();
 	}
@@ -722,9 +660,9 @@ BYTE send_cmd (
 		if (res > 1) return res;
 	}
 
-	/* Select the card and wait for ready */
-	DESELECT();
-	SELECT();
+	/* _SELECT the card and wait for ready */
+	_DE_SELECT();
+	_SELECT();
 	if (wait_ready() != 0xFF) {
 		return 0xFF;
 	}
@@ -764,13 +702,13 @@ BYTE send_cmd (
 /* Initialize Disk Drive                                                 */
 /*-----------------------------------------------------------------------*/
 
-DSTATUS MMC_disk_initialize (
-	void
+DSTATUS disk_initialize (
+	BYTE drv		/* Physical drive number (0) */
 )
 {
 	BYTE n, cmd, ty, ocr[4];
 
-	//if (drv) return STA_NOINIT;			/* Supports only single drive */
+	if (drv) return STA_NOINIT;			/* Supports only single drive */
 	if (Stat & STA_NODISK) return Stat;	/* No card in the socket */
 
 	power_on();							/* Force socket power on and initialize interface */
@@ -819,11 +757,11 @@ DSTATUS MMC_disk_initialize (
 /* Get Disk Status                                                       */
 /*-----------------------------------------------------------------------*/
 
-DSTATUS MMC_disk_status (
-	void
+DSTATUS disk_status (
+	BYTE drv		/* Physical drive number (0) */
 )
 {
-	//if (drv) return STA_NOINIT;		/* Supports only single drive */
+	if (drv) return STA_NOINIT;		/* Supports only single drive */
 	return Stat;
 }
 
@@ -833,13 +771,14 @@ DSTATUS MMC_disk_status (
 /* Read Sector(s)                                                        */
 /*-----------------------------------------------------------------------*/
 
-DRESULT MMC_disk_read (
+DRESULT disk_read (
+	BYTE drv,			/* Physical drive number (0) */
 	BYTE *buff,			/* Pointer to the data buffer to store read data */
 	DWORD sector,		/* Start sector number (LBA) */
-	UINT count			/* Sector count (1..255) */
+	BYTE count			/* Sector count (1..255) */
 )
 {
-	//if (drv || !count) return RES_PARERR;
+	if (drv || !count) return RES_PARERR;
 	if (Stat & STA_NOINIT) return RES_NOTRDY;
 
 	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert to byte address if needed */
@@ -875,13 +814,14 @@ DRESULT MMC_disk_read (
 
 #if _FS_READONLY == 0
 
-DRESULT MMC_disk_write (
+DRESULT disk_write (
+	BYTE drv,			/* Physical drive number (0) */
 	const BYTE *buff,	/* Pointer to the data to be written */
 	DWORD sector,		/* Start sector number (LBA) */
-	UINT count			/* Sector count (1..255) */
+	BYTE count			/* Sector count (1..255) */
 )
 {
-	//if (drv || !count) return RES_PARERR;
+	if (drv || !count) return RES_PARERR;
 	if (Stat & STA_NOINIT) return RES_NOTRDY;
 	if (Stat & STA_PROTECT) return RES_WRPRT;
 
@@ -916,7 +856,8 @@ DRESULT MMC_disk_write (
 /*-----------------------------------------------------------------------*/
 
 #if (STM32_SD_DISK_IOCTRL == 1)
-DRESULT MMC_disk_ioctl (
+DRESULT disk_ioctl (
+	BYTE drv,		/* Physical drive number (0) */
 	BYTE ctrl,		/* Control code */
 	void *buff		/* Buffer to send/receive control data */
 )
@@ -925,7 +866,7 @@ DRESULT MMC_disk_ioctl (
 	BYTE n, csd[16], *ptr = buff;
 	WORD csize;
 
-	//if (drv) return RES_PARERR;
+	if (drv) return RES_PARERR;
 
 	res = RES_ERROR;
 
@@ -953,7 +894,7 @@ DRESULT MMC_disk_ioctl (
 
 		switch (ctrl) {
 		case CTRL_SYNC :		/* Make sure that no pending write process */
-			SELECT();
+			_SELECT();
 			if (wait_ready() == 0xFF)
 				res = RES_OK;
 			break;
@@ -1043,10 +984,10 @@ DRESULT MMC_disk_ioctl (
 #endif /* _USE_IOCTL != 0 */
 
 
-///*-----------------------------------------------------------------------*/
-///* Device Timer Interrupt Procedure  (Platform dependent)                */
-///*-----------------------------------------------------------------------*/
-///* This function must be called in period of 10ms                        */
+/*-----------------------------------------------------------------------*/
+/* Device Timer Interrupt Procedure  (Platform dependent)                */
+/*-----------------------------------------------------------------------*/
+/* This function must be called in period of 10ms                        */
 
 RAMFUNC void disk_timerproc (void)
 {
@@ -1080,19 +1021,3 @@ RAMFUNC void disk_timerproc (void)
 	}
 }
 
-DWORD get_fattime (void)
-{
-#if 1
-	  DWORD date;
-	  time_t _sec = RTC_GetCounter();
-	  int tmp_year;
-    struct tm *t = localtime(&_sec);
-	  tmp_year=t->tm_year-2000;
-    date = 0;
-    date = (tmp_year<< 25) | ((t->tm_mon+1)<<21) | (t->tm_mday<<16)|\
-            (t->tm_hour<<11) | (t->tm_min<<5) | (t->tm_sec>>1);
-    return date;
-#else
-	return 0;
-#endif  
-}

@@ -13,9 +13,9 @@
 "..\output\stm32f10x_bkp.o"
 "..\output\stm32f10x_pwr.o"
 "..\output\stm32f10x_rtc.o"
-"..\output\diskio.o"
 "..\output\ff.o"
-"..\output\syscall.o"
+"..\output\fattime.o"
+"..\output\ccsbcs.o"
 --strict --scatter "..\Output\project.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

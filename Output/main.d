@@ -33,5 +33,6 @@
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h
 ..\output\main.o: ..\STM32F10x_StdPeriph_Driver\inc\misc.h
+..\output\main.o: D:\Keil_v5\ARM\ARMCC\bin\..\include\stdbool.h
 ..\output\main.o: ..\ff11\src\ff.h
 ..\output\main.o: ..\ff11\src\ffconf.h
