@@ -501,9 +501,14 @@
               <FilePath>..\ff11\src\ff.c</FilePath>
             </File>
             <File>
-              <FileName>diskio.c</FileName>
+              <FileName>fattime.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\ff11\src\diskio.c</FilePath>
+              <FilePath>..\ff11\src\fattime.c</FilePath>
+            </File>
+            <File>
+              <FileName>ccsbcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ff11\src\option\ccsbcs.c</FilePath>
             </File>
           </Files>
         </Group>
